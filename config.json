@@ -1,0 +1,22 @@
+{
+    "username": "YOUR_INSTAGRAM_USERNAME",
+    "password": "YOUR_INSTAGRAM_PASSWORD",
+    "target_accounts": [
+        "example_account_to_follow_followers"
+    ],
+    "specific_accounts_to_follow": [
+        "specific_user1",
+        "specific_user2"
+    ],
+    "settings": {
+        "max_followers_to_follow": 50,
+        "delay_between_follows_min": 30,
+        "delay_between_follows_max": 60,
+        "skip_private_accounts": false,
+        "skip_business_accounts": false,
+        "min_followers": 10,
+        "max_followers": 10000,
+        "session_file": "session.json",
+        "cache_file": "follow_cache.json"
+    }
+}

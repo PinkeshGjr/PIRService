@@ -16,6 +16,7 @@
         "skip_business_accounts": false,
         "min_followers": 10,
         "max_followers": 10000,
-        "session_file": "session.json"
+        "session_file": "session.json",
+        "cache_file": "follow_cache.json"
     }
 }

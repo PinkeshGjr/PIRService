@@ -240,13 +240,17 @@ class InstagramFollowerBot:
                     logger.info(f"Skipping {username}: already processed (status: {cached['status']})")
                     continue
 
-                user_info = self.client.user_info(user_id)
+                user_info = self.client.user_info_v1(user_id)
 
-                # Check if already following on Instagram
-                if user_info.following:
-                    logger.info(f"Already following: {username}")
-                    self.cache.add_user(user_id, username, "already_following", "specific")
-                    continue
+                # Check if already following using friendship status
+                try:
+                    friendship = self.client.user_friendship_v1(user_id)
+                    if friendship.following:
+                        logger.info(f"Already following: {username}")
+                        self.cache.add_user(user_id, username, "already_following", "specific")
+                        continue
+                except Exception:
+                    pass  # If friendship check fails, proceed with follow attempt
 
                 if self.follow_user(user_id, username, "specific"):
                     followed_count += 1
@@ -291,14 +295,18 @@ class InstagramFollowerBot:
                 try:
                     processed_count += 1
 
-                    # Get full user info for criteria check
-                    full_info = self.client.user_info(follower_id)
+                    # Get full user info for criteria check (use v1 API directly)
+                    full_info = self.client.user_info_v1(follower_id)
 
-                    # Check if already following on Instagram
-                    if full_info.following:
-                        logger.debug(f"Already following: {follower_info.username}")
-                        self.cache.add_user(follower_id, follower_info.username, "already_following", target_username)
-                        continue
+                    # Check if already following using friendship status
+                    try:
+                        friendship = self.client.user_friendship_v1(follower_id)
+                        if friendship.following:
+                            logger.debug(f"Already following: {follower_info.username}")
+                            self.cache.add_user(follower_id, follower_info.username, "already_following", target_username)
+                            continue
+                    except Exception:
+                        pass  # If friendship check fails, proceed with follow attempt
 
                     if not self._should_follow_user(full_info, target_username):
                         continue
